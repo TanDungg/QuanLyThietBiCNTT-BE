@@ -23,7 +23,7 @@ import { convertObjectToUrlParams } from "src/util/Common";
 
 const { EditableRow, EditableCell } = EditableTableRow;
 
-function BoPhan({ permission, history }) {
+function ChucVu({ permission, history }) {
   const dispatch = useDispatch();
   const { data, loading } = useSelector(({ common }) => common).toJS();
   const [keyword, setKeyword] = useState("");
@@ -32,7 +32,7 @@ function BoPhan({ permission, history }) {
 
   useEffect(() => {
     function load() {
-      dispatch(fetchStart("BoPhan", "GET", null, "LIST"));
+      dispatch(fetchStart("ChucVu", "GET", null, "LIST"));
     }
     if (permission && permission.view) {
       load();
@@ -45,7 +45,7 @@ function BoPhan({ permission, history }) {
   }, []);
 
   const loadData = () => {
-    dispatch(fetchStart("BoPhan", "GET", null, "LIST"));
+    dispatch(fetchStart("ChucVu", "GET", null, "LIST"));
   };
 
   /**
@@ -60,7 +60,7 @@ function BoPhan({ permission, history }) {
    */
   const getListData = (keyword, page, pageSize) => {
     let param = convertObjectToUrlParams({ pageSize, page, keyword });
-    dispatch(fetchStart(`BoPhan?${param}`, "GET", null, "LIST"));
+    dispatch(fetchStart(`ChucVu?${param}`, "GET", null, "LIST"));
   };
   /**
    * Tìm kiếm người dùng
@@ -97,8 +97,8 @@ function BoPhan({ permission, history }) {
    * @param {*} item
    */
   const deleteItemAction = (item) => {
-    let url = `BoPhan/${item.id}`;
-    if (item.isRemove) url = `BoPhan/Remove/${item.id}`;
+    let url = `ChucVu/${item.id}`;
+    if (item.isRemove) url = `ChucVu/Remove/${item.id}`;
     new Promise((resolve, reject) => {
       dispatch(fetchStart(url, "DELETE", null, "DELETE", "", resolve, reject));
     })
@@ -119,7 +119,7 @@ function BoPhan({ permission, history }) {
       permission && permission.edit ? (
         <Link
           to={{
-            pathname: `/danh-muc/bo-phan/${item.id}/chinh-sua`,
+            pathname: `/danh-muc/chuc-vu/${item.id}/chinh-sua`,
             state: { itemData: item, permission },
           }}
           title="Sửa"
@@ -161,7 +161,7 @@ function BoPhan({ permission, history }) {
       new Promise((resolve, reject) => {
         dispatch(
           fetchStart(
-            `BoPhan/${item.id}`,
+            `ChucVu/${item.id}`,
             "PUT",
             {
               ...item,
@@ -192,21 +192,21 @@ function BoPhan({ permission, history }) {
       align: "center",
     },
     {
-      title: "Mã bộ phận",
-      dataIndex: "maBoPhan",
-      key: "maBoPhan",
+      title: "Mã chức vụ",
+      dataIndex: "maChucVu",
+      key: "maChucVu",
       align: "center",
     },
     {
-      title: "Tên bộ phận",
+      title: "Tên chức vụ",
+      dataIndex: "tenChucVu",
+      key: "tenChucVu",
+      align: "center",
+    },
+    {
+      title: "Bộ phận",
       dataIndex: "tenBoPhan",
       key: "tenBoPhan",
-      align: "center",
-    },
-    {
-      title: "Phòng ban",
-      dataIndex: "tenPhongBan",
-      key: "TenPhongBan",
       align: "center",
     },
     {
@@ -256,7 +256,7 @@ function BoPhan({ permission, history }) {
    */
   const handleRedirect = () => {
     history.push({
-      pathname: "/danh-muc/bo-phan/them-moi",
+      pathname: "/danh-muc/chuc-vu/them-moi",
     });
   };
 
@@ -279,8 +279,8 @@ function BoPhan({ permission, history }) {
   return (
     <div className="gx-main-content">
       <ContainerHeader
-        title={"Bộ phận"}
-        description="Danh sách Bộ phận"
+        title={"Chức vụ"}
+        description="Danh sách chức vụ"
         buttons={addButtonRender()}
       />
       <Card className="th-card-margin-bottom ">
@@ -314,4 +314,4 @@ function BoPhan({ permission, history }) {
   );
 }
 
-export default BoPhan;
+export default ChucVu;

@@ -239,8 +239,15 @@ function NguoiDung({ history, permission }) {
       { title: "Mã nhân viên", dataIndex: "maNhanVien", key: "maNhanVien" },
       { title: "Họ tên", dataIndex: "fullName", key: "fullName" },
       { title: "Email", dataIndex: "email", key: "email" },
-      { title: "Đơn vị", dataIndex: "tenBoPhan", key: "tenBoPhan" },
-      { title: "Bộ phận", dataIndex: "tenDonVi", key: "tenDonVi" },
+      { title: "Chức vụ", dataIndex: "tenChucVu", key: "tenChucVu" },
+      { title: "Bộ phận", dataIndex: "tenBoPhan", key: "tenBoPhan" },
+      { title: "Phòng ban", dataIndex: "tenPhongBan", key: "tenPhongBan" },
+      { title: "Đơn vị", dataIndex: "tenDonVi", key: "tenDonVi" },
+      {
+        title: "Đơn vị trả lương",
+        dataIndex: "tenDonViTraLuong",
+        key: "tenDonViTraLuong",
+      },
 
       {
         title: "Quyền",

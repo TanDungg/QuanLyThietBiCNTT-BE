@@ -1,12 +1,12 @@
 import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
 import { Button, Card, Divider } from "antd";
-import find from "lodash/find";
+// import find from "lodash/find";
 import isEmpty from "lodash/isEmpty";
 import map from "lodash/map";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { treeToFlatlist } from "src/util/Common";
+// import { treeToFlatlist } from "src/util/Common";
 
 import { fetchReset, fetchStart } from "src/appRedux/actions/Common";
 import { reDataForTable } from "src/util/Common";
@@ -23,7 +23,7 @@ import { convertObjectToUrlParams } from "src/util/Common";
 
 const { EditableRow, EditableCell } = EditableTableRow;
 
-function BoPhan({ permission, history }) {
+function DonViTraLuong({ history, permission }) {
   const dispatch = useDispatch();
   const { data, loading } = useSelector(({ common }) => common).toJS();
   const [keyword, setKeyword] = useState("");
@@ -32,7 +32,7 @@ function BoPhan({ permission, history }) {
 
   useEffect(() => {
     function load() {
-      dispatch(fetchStart("BoPhan", "GET", null, "LIST"));
+      dispatch(fetchStart("DonViTraLuong", "GET", null, "LIST"));
     }
     if (permission && permission.view) {
       load();
@@ -45,7 +45,7 @@ function BoPhan({ permission, history }) {
   }, []);
 
   const loadData = () => {
-    dispatch(fetchStart("BoPhan", "GET", null, "LIST"));
+    dispatch(fetchStart("DonViTraLuong", "GET", null, "LIST"));
   };
 
   /**
@@ -60,7 +60,7 @@ function BoPhan({ permission, history }) {
    */
   const getListData = (keyword, page, pageSize) => {
     let param = convertObjectToUrlParams({ pageSize, page, keyword });
-    dispatch(fetchStart(`BoPhan?${param}`, "GET", null, "LIST"));
+    dispatch(fetchStart(`DonViTraLuong?${param}`, "GET", null, "LIST"));
   };
   /**
    * Tìm kiếm người dùng
@@ -97,8 +97,8 @@ function BoPhan({ permission, history }) {
    * @param {*} item
    */
   const deleteItemAction = (item) => {
-    let url = `BoPhan/${item.id}`;
-    if (item.isRemove) url = `BoPhan/Remove/${item.id}`;
+    let url = `DonViTraLuong/${item.id}`;
+    if (item.isRemove) url = `DonViTraLuong/Remove/${item.id}`;
     new Promise((resolve, reject) => {
       dispatch(fetchStart(url, "DELETE", null, "DELETE", "", resolve, reject));
     })
@@ -119,7 +119,7 @@ function BoPhan({ permission, history }) {
       permission && permission.edit ? (
         <Link
           to={{
-            pathname: `/danh-muc/bo-phan/${item.id}/chinh-sua`,
+            pathname: `/danh-muc/don-vi-tra-luong/${item.id}/chinh-sua`,
             state: { itemData: item, permission },
           }}
           title="Sửa"
@@ -148,41 +148,6 @@ function BoPhan({ permission, history }) {
     );
   };
 
-  /**
-   * Save item from table
-   * @param {object} row
-   * @memberof ChucNang
-   */
-  const handleSave = async (row) => {
-    const dataValue = treeToFlatlist(data);
-    // Check data not change
-    const item = find(dataValue, (item) => item.id === row.id);
-    if (!isEmpty(item)) {
-      new Promise((resolve, reject) => {
-        dispatch(
-          fetchStart(
-            `BoPhan/${item.id}`,
-            "PUT",
-            {
-              ...item,
-              thuTu: row.thuTu,
-            },
-            "EDIT",
-            "",
-            resolve,
-            reject
-          )
-        );
-      })
-        .then((res) => {
-          if (res && res.status === 204) {
-            loadData();
-          }
-        })
-        .catch((error) => console.error(error));
-    }
-  };
-
   let colValues = [
     {
       title: "STT",
@@ -192,21 +157,15 @@ function BoPhan({ permission, history }) {
       align: "center",
     },
     {
-      title: "Mã bộ phận",
-      dataIndex: "maBoPhan",
-      key: "maBoPhan",
+      title: "Mã đơn vị trả lương",
+      dataIndex: "maDonViTraLuong",
+      key: "maDonViTraLuong",
       align: "center",
     },
     {
-      title: "Tên bộ phận",
-      dataIndex: "tenBoPhan",
-      key: "tenBoPhan",
-      align: "center",
-    },
-    {
-      title: "Phòng ban",
-      dataIndex: "tenPhongBan",
-      key: "TenPhongBan",
+      title: "Tên đơn vị trả lương",
+      dataIndex: "tenDonViTraLuong",
+      key: "tenDonViTraLuong",
       align: "center",
     },
     {
@@ -244,7 +203,6 @@ function BoPhan({ permission, history }) {
         dataIndex: col.dataIndex,
         title: col.title,
         info: col.info,
-        handleSave: handleSave,
       }),
     };
   });
@@ -256,7 +214,7 @@ function BoPhan({ permission, history }) {
    */
   const handleRedirect = () => {
     history.push({
-      pathname: "/danh-muc/bo-phan/them-moi",
+      pathname: "/danh-muc/don-vi-tra-luong/them-moi",
     });
   };
 
@@ -279,8 +237,8 @@ function BoPhan({ permission, history }) {
   return (
     <div className="gx-main-content">
       <ContainerHeader
-        title={"Bộ phận"}
-        description="Danh sách Bộ phận"
+        title={"Đơn vị trả lương"}
+        description="Danh sách đơn vị trả lương"
         buttons={addButtonRender()}
       />
       <Card className="th-card-margin-bottom ">
@@ -301,7 +259,7 @@ function BoPhan({ permission, history }) {
         <Table
           bordered
           columns={columns}
-          scroll={{ x: 500 }}
+          scroll={{ x: 400 }}
           components={components}
           className="gx-table-responsive"
           dataSource={dataList}
@@ -314,4 +272,4 @@ function BoPhan({ permission, history }) {
   );
 }
 
-export default BoPhan;
+export default DonViTraLuong;

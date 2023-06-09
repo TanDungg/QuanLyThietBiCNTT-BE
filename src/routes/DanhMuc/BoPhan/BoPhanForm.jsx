@@ -13,8 +13,7 @@ const FormItem = Form.Item;
 const initialState = {
   maBoPhan: "",
   tenBoPhan: "",
-  donVi_Id: "",
-  tapDoan_Id: "",
+  phongBan_Id: "",
 };
 const BoPhanForm = ({ history, match, permission }) => {
   const dispatch = useDispatch();
@@ -22,9 +21,8 @@ const BoPhanForm = ({ history, match, permission }) => {
   const [id, setId] = useState(undefined);
   const [fieldTouch, setFieldTouch] = useState(false);
   const [form] = Form.useForm();
-  const { maBoPhan, tenBoPhan, donVi_Id, tapDoan_Id } = initialState;
-  const [donViSelect, setDonViSelect] = useState([]);
-  const [tapDoanSelect, setTapDoanSelect] = useState([]);
+  const { maBoPhan, tenBoPhan, phongBan_Id } = initialState;
+  const [phongBanSelect, setPhongBanSelect] = useState([]);
 
   const { validateFields, resetFields, setFieldsValue } = form;
   const [info, setInfo] = useState({});
@@ -32,8 +30,7 @@ const BoPhanForm = ({ history, match, permission }) => {
     const load = () => {
       if (includes(match.url, "them-moi")) {
         if (permission && permission.add) {
-          getDataDonVi();
-          getDataTapDoan();
+          getData();
           setType("new");
         } else if (permission && !permission.add) {
           history.push("/home");
@@ -54,24 +51,15 @@ const BoPhanForm = ({ history, match, permission }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const getDataDonVi = () => {
+  const getData = () => {
     new Promise((resolve, reject) => {
-      dispatch(fetchStart(`DonVi`, "GET", null, "DETAIL", "", resolve, reject));
+      dispatch(
+        fetchStart(`PhongBan`, "GET", null, "DETAIL", "", resolve, reject)
+      );
     })
       .then((res) => {
         if (res && res.data) {
-          setDonViSelect(res.data);
-        }
-      })
-      .catch((error) => console.error(error));
-  };
-  const getDataTapDoan = () => {
-    new Promise((resolve, reject) => {
-      dispatch(fetchStart(`TapDoan`, "GET", null, "DETAIL", "", resolve, reject));
-    })
-      .then((res) => {
-        if (res && res.data) {
-          setTapDoanSelect(res.data);
+          setPhongBanSelect(res.data);
         }
       })
       .catch((error) => console.error(error));
@@ -83,8 +71,7 @@ const BoPhanForm = ({ history, match, permission }) => {
    */
   const getInfo = () => {
     const { id } = match.params;
-    getDataDonVi();
-    getDataTapDoan();
+    getData();
     setId(id);
     new Promise((resolve, reject) => {
       dispatch(
@@ -97,7 +84,7 @@ const BoPhanForm = ({ history, match, permission }) => {
           setFieldsValue({
             bophan: data,
           });
-          setInfo(...res.data, res.data[0].donVi);
+          setInfo(...res.data, res.data[0].phongBan);
         }
       })
       .catch((error) => console.error(error));
@@ -149,7 +136,7 @@ const BoPhanForm = ({ history, match, permission }) => {
         .catch((error) => console.error(error));
     }
     if (type === "edit") {
-      delete info.donVi;
+      delete info.phongBan;
       var newData = { ...info, ...user };
       new Promise((resolve, reject) => {
         dispatch(
@@ -223,40 +210,21 @@ const BoPhanForm = ({ history, match, permission }) => {
             <Input className="input-item" placeholder="Nhập tên bộ phận" />
           </FormItem>
           <FormItem
-            label="Đơn vị"
-            name={["bophan", "donVi_Id"]}
+            label="Phòng ban"
+            name={["bophan", "phongBan_Id"]}
             rules={[
               {
                 type: "string",
                 required: true,
               },
             ]}
-            initialValue={donVi_Id}
+            initialValue={phongBan_Id}
           >
             <Select
               className="heading-select slt-search th-select-heading"
-              data={donViSelect ? donViSelect : []}
+              data={phongBanSelect ? phongBanSelect : []}
               placeholder="Chọn loại"
-              optionsvalue={["id", "tenDonVi"]}
-              style={{ width: "100%" }}
-            />
-          </FormItem>
-          <FormItem
-            label="Tập đoàn"
-            name={["bophan", "tapDoan_Id"]}
-            rules={[
-              {
-                type: "string",
-                required: true,
-              },
-            ]}
-            initialValue={tapDoan_Id}
-          >
-            <Select
-              className="heading-select slt-search th-select-heading"
-              data={tapDoanSelect ? tapDoanSelect : []}
-              placeholder="Chọn loại"
-              optionsvalue={["id", "tenTapDoan"]}
+              optionsvalue={["id", "tenPhongBan"]}
               style={{ width: "100%" }}
             />
           </FormItem>

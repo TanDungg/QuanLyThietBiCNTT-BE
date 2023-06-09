@@ -16,8 +16,11 @@ const initialState = {
   chucDanh: "",
   userName: "",
   maNhanVien: "",
-  donVi_Id: "",
+  chucVu_Id: "",
   boPhan_Id: "",
+  phongBan_Id: "",
+  donVi_Id: "",
+  donViTraLuong_Id: "",
   roleNames: [],
   isActive: true,
 };
