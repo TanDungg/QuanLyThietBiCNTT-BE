@@ -14,7 +14,6 @@ const initialState = {
   maPhongBan: "",
   tenPhongBan: "",
   donVi_Id: "",
-  tapDoan_Id: "",
 };
 const PhongBanForm = ({ history, match, permission }) => {
   const dispatch = useDispatch();
@@ -24,17 +23,14 @@ const PhongBanForm = ({ history, match, permission }) => {
   const [form] = Form.useForm();
   const { maPhongBan, tenPhongBan, donVi_Id, tapDoan_Id } = initialState;
   const [donViSelect, setDonViSelect] = useState([]);
-  const [tapDoanSelect, setTapDoanSelect] = useState([]);
 
   const { validateFields, resetFields, setFieldsValue } = form;
-  const [infoDonVi, setInfoDonVi] = useState({});
-  const [infoTapDoan, setInfoTapDoan] = useState({});
+  const [info, setInfo] = useState({});
   useEffect(() => {
     const load = () => {
       if (includes(match.url, "them-moi")) {
         if (permission && permission.add) {
-          getDataDonVi();
-          getDataTapDoan();
+          getData();
           setType("new");
         } else if (permission && !permission.add) {
           history.push("/home");
@@ -44,8 +40,7 @@ const PhongBanForm = ({ history, match, permission }) => {
           setType("edit");
           const { id } = match.params;
           setId(id);
-          getInfoDonVi();
-          getInfoTapDoan();
+          getInfo();
         } else if (permission && !permission.edit) {
           history.push("/home");
         }
@@ -56,7 +51,7 @@ const PhongBanForm = ({ history, match, permission }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const getDataDonVi = () => {
+  const getData = () => {
     new Promise((resolve, reject) => {
       dispatch(fetchStart(`DonVi`, "GET", null, "DETAIL", "", resolve, reject));
     })
@@ -67,25 +62,14 @@ const PhongBanForm = ({ history, match, permission }) => {
       })
       .catch((error) => console.error(error));
   };
-  const getDataTapDoan = () => {
-    new Promise((resolve, reject) => {
-      dispatch(fetchStart(`TapDoan`, "GET", null, "DETAIL", "", resolve, reject));
-    })
-      .then((res) => {
-        if (res && res.data) {
-          setTapDoanSelect(res.data);
-        }
-      })
-      .catch((error) => console.error(error));
-  };
 
   /**
    * Lấy thông tin
    *
    */
-  const getInfoDonVi = () => {
+  const getInfo = () => {
     const { id } = match.params;
-    getDataDonVi();
+    getData();
     setId(id);
     new Promise((resolve, reject) => {
       dispatch(
@@ -98,27 +82,7 @@ const PhongBanForm = ({ history, match, permission }) => {
           setFieldsValue({
             phongban: data,
           });
-          setInfoDonVi(...res.data, res.data[0].donVi);
-        }
-      })
-      .catch((error) => console.error(error));
-  };
-  const getInfoTapDoan = () => {
-    const { id } = match.params;
-    getDataTapDoan();
-    setId(id);
-    new Promise((resolve, reject) => {
-      dispatch(
-        fetchStart(`PhongBan/${id}`, "GET", null, "DETAIL", "", resolve, reject)
-      );
-    })
-      .then((res) => {
-        if (res && res.data) {
-          const data = res.data[0];
-          setFieldsValue({
-            phongban: data,
-          });
-          setInfoTapDoan(...res.data, res.data[0].tapDoan);
+          setInfo(...res.data, res.data[0].donVi);
         }
       })
       .catch((error) => console.error(error));
@@ -169,8 +133,8 @@ const PhongBanForm = ({ history, match, permission }) => {
         .catch((error) => console.error(error));
     }
     if (type === "edit") {
-      delete infoDonVi.donVi;
-      var newData = { ...infoDonVi, ...user };
+      delete info.donVi;
+      var newData = { ...info, ...user };
       new Promise((resolve, reject) => {
         dispatch(
           fetchStart(
@@ -188,41 +152,16 @@ const PhongBanForm = ({ history, match, permission }) => {
           if (saveQuit) {
             if (res.status !== 409) goBack();
           } else {
-            getInfoDonVi();
+            getInfo();
             setFieldTouch(false);
           }
         })
         .catch((error) => console.error(error));
     }
-    if (type === "edit") {
-        delete infoTapDoan.tapDoan;
-        var newData = { ...infoTapDoan, ...user };
-        new Promise((resolve, reject) => {
-          dispatch(
-            fetchStart(
-              `PhongBan/${id}`,
-              "PUT",
-              newData,
-              "EDIT",
-              "",
-              resolve,
-              reject
-            )
-          );
-        })
-          .then((res) => {
-            if (saveQuit) {
-              if (res.status !== 409) goBack();
-            } else {
-              getInfoTapDoan();
-              setFieldTouch(false);
-            }
-          })
-          .catch((error) => console.error(error));
-      }
   };
 
-  const formTitle = type === "new" ? "Thêm mới phòng ban" : "Chỉnh sửa phòng ban";
+  const formTitle =
+    type === "new" ? "Thêm mới phòng ban" : "Chỉnh sửa phòng ban";
   return (
     <div className="gx-main-content">
       <ContainerHeader title={formTitle} back={goBack} />
@@ -284,25 +223,6 @@ const PhongBanForm = ({ history, match, permission }) => {
               data={donViSelect ? donViSelect : []}
               placeholder="Chọn loại đơn vị"
               optionsvalue={["id", "tenDonVi"]}
-              style={{ width: "100%" }}
-            />
-          </FormItem>
-          <FormItem
-            label="Tập đoàn"
-            name={["phongban", "tapDoan_Id"]}
-            rules={[
-              {
-                type: "string",
-                required: true,
-              },
-            ]}
-            initialValue={tapDoan_Id}
-          >
-            <Select
-              className="heading-select slt-search th-select-heading"
-              data={tapDoanSelect ? tapDoanSelect : []}
-              placeholder="Chọn loại tập đoàn"
-              optionsvalue={["id", "tenTapDoan"]}
               style={{ width: "100%" }}
             />
           </FormItem>

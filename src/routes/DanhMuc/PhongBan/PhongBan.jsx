@@ -210,12 +210,6 @@ function PhongBan({ permission, history }) {
       align: "center",
     },
     {
-      title: "Tập đoàn",
-      dataIndex: "tenTapDoan",
-      key: "tenTapDoan",
-      align: "center",
-    },
-    {
       title: "Chức năng",
       key: "action",
       align: "center",
