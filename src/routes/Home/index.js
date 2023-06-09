@@ -1,16 +1,21 @@
 import React from "react";
+import { Route, Switch } from "react-router-dom";
+import asyncComponent from "util/asyncComponent";
+import Auth from "src/helpers/Auth";
 
-function Home() {
+const Home = asyncComponent(() => import("./Home"));
+
+const App = ({ match, location, menus, permission }) => {
+  const { pathname } = location;
   return (
-    <div className="gx-main-content">
-      <img
-        src="http://thietbi.thacoindustries.vn/static/media/imagehome.6850c4cc.jpg"
-        alt="logo"
-        width={"100%"}
-        height={"100%"}
+    <Switch>
+      <Route
+        path={`${match.url}`}
+        exact
+        component={Auth(Home, menus, pathname, permission)}
       />
-    </div>
+    </Switch>
   );
-}
+};
 
-export default Home;
+export default App;
