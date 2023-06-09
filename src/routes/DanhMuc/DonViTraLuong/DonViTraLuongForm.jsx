@@ -71,7 +71,7 @@ const DonViTraLuongForm = ({ history, match, permission }) => {
       .then((res) => {
         if (res && res.data) {
           setFieldsValue({
-            DonViTraLuong: res.data,
+            donvitraluong: res.data,
           });
           setInfo(res.data);
         }

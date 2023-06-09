@@ -16,6 +16,7 @@ const initialState = {
   chucDanh: "",
   userName: "",
   maNhanVien: "",
+  phoneNumber: "",
   chucVu_Id: "",
   boPhan_Id: "",
   phongBan_Id: "",
@@ -29,8 +30,11 @@ const NguoiDungForm = ({ history, match, permission }) => {
   const [type, setType] = useState("new");
   const [id, setId] = useState(undefined);
   const [roleSelect, setRoleSelect] = useState([]);
-  const [donViSelect, setDonViSelect] = useState([]);
+  const [chucVuSelect, setChucVuSelect] = useState([]);
   const [boPhanSelect, setBoPhanSelect] = useState([]);
+  const [phongBanSelect, setPhongBanSelect] = useState([]);
+  const [donViSelect, setDonViSelect] = useState([]);
+  const [donViTraLuongSelect, setDonViTraLuongSelect] = useState([]);
   const [fieldTouch, setFieldTouch] = useState(false);
   const [form] = Form.useForm();
   const {
@@ -39,8 +43,12 @@ const NguoiDungForm = ({ history, match, permission }) => {
     roleNames,
     isActive,
     maNhanVien,
+    phoneNumber,
+    chucVu_Id,
     boPhan_Id,
+    phongBan_Id,
     donVi_Id,
+    donViTraLuong_Id,
     chucDanh,
   } = initialState;
   const { validateFields, resetFields, setFieldsValue } = form;
@@ -72,11 +80,13 @@ const NguoiDungForm = ({ history, match, permission }) => {
   }, []);
   const getData = () => {
     new Promise((resolve, reject) => {
-      dispatch(fetchStart(`DonVi`, "GET", null, "DETAIL", "", resolve, reject));
+      dispatch(
+        fetchStart(`ChucVu`, "GET", null, "DETAIL", "", resolve, reject)
+      );
     })
       .then((res) => {
         if (res && res.data) {
-          setDonViSelect(res.data);
+          setChucVuSelect(res.data);
         }
       })
       .catch((error) => console.error(error));
@@ -88,6 +98,37 @@ const NguoiDungForm = ({ history, match, permission }) => {
       .then((res) => {
         if (res && res.data) {
           setBoPhanSelect(res.data);
+        }
+      })
+      .catch((error) => console.error(error));
+    new Promise((resolve, reject) => {
+      dispatch(
+        fetchStart(`PhongBan`, "GET", null, "DETAIL", "", resolve, reject)
+      );
+    })
+      .then((res) => {
+        if (res && res.data) {
+          setPhongBanSelect(res.data);
+        }
+      })
+      .catch((error) => console.error(error));
+    new Promise((resolve, reject) => {
+      dispatch(fetchStart(`DonVi`, "GET", null, "DETAIL", "", resolve, reject));
+    })
+      .then((res) => {
+        if (res && res.data) {
+          setDonViSelect(res.data);
+        }
+      })
+      .catch((error) => console.error(error));
+    new Promise((resolve, reject) => {
+      dispatch(
+        fetchStart(`DonViTraLuong`, "GET", null, "DETAIL", "", resolve, reject)
+      );
+    })
+      .then((res) => {
+        if (res && res.data) {
+          setDonViTraLuongSelect(res.data);
         }
       })
       .catch((error) => console.error(error));
@@ -287,21 +328,34 @@ const NguoiDungForm = ({ history, match, permission }) => {
             <Input className="input-item" placeholder="Nhập mã nhân viên" />
           </FormItem>
           <FormItem
-            label="Đơn vị"
-            name={["user", "donVi_Id"]}
+            label="Số điện thoại"
+            name={["user", "phoneNumber"]}
             rules={[
               {
                 type: "string",
                 required: true,
               },
             ]}
-            initialValue={donVi_Id}
+            initialValue={phoneNumber}
+          >
+            <Input className="input-item" placeholder="Nhập số điện thoại" />
+          </FormItem>
+          <FormItem
+            label="Chức vụ"
+            name={["user", "chucVu_Id"]}
+            rules={[
+              {
+                type: "string",
+                required: true,
+              },
+            ]}
+            initialValue={chucVu_Id}
           >
             <Select
               className="heading-select slt-search th-select-heading"
-              data={donViSelect ? donViSelect : []}
-              placeholder="Chọn đơn vị"
-              optionsvalue={["id", "tenDonVi"]}
+              data={chucVuSelect ? chucVuSelect : []}
+              placeholder="Chọn chức vụ"
+              optionsvalue={["id", "tenChucVu"]}
               style={{ width: "100%" }}
               // mode="multiple"
             />
@@ -322,6 +376,66 @@ const NguoiDungForm = ({ history, match, permission }) => {
               data={boPhanSelect ? boPhanSelect : []}
               placeholder="Chọn bộ phận"
               optionsvalue={["id", "tenBoPhan"]}
+              style={{ width: "100%" }}
+              // mode="multiple"
+            />
+          </FormItem>
+          <FormItem
+            label="Phòng ban"
+            name={["user", "phongBan_Id"]}
+            rules={[
+              {
+                type: "string",
+                required: true,
+              },
+            ]}
+            initialValue={phongBan_Id}
+          >
+            <Select
+              className="heading-select slt-search th-select-heading"
+              data={phongBanSelect ? phongBanSelect : []}
+              placeholder="Chọn phòng ban"
+              optionsvalue={["id", "tenPhongBan"]}
+              style={{ width: "100%" }}
+              // mode="multiple"
+            />
+          </FormItem>
+          <FormItem
+            label="Đơn vị"
+            name={["user", "donVi_Id"]}
+            rules={[
+              {
+                type: "string",
+                required: true,
+              },
+            ]}
+            initialValue={donVi_Id}
+          >
+            <Select
+              className="heading-select slt-search th-select-heading"
+              data={donViSelect ? donViSelect : []}
+              placeholder="Chọn đơn vị"
+              optionsvalue={["id", "tenDonVi"]}
+              style={{ width: "100%" }}
+              // mode="multiple"
+            />
+          </FormItem>
+          <FormItem
+            label="Đơn vị trả lương"
+            name={["user", "donViTraLuong_Id"]}
+            rules={[
+              {
+                type: "string",
+                required: true,
+              },
+            ]}
+            initialValue={donViTraLuong_Id}
+          >
+            <Select
+              className="heading-select slt-search th-select-heading"
+              data={donViTraLuongSelect ? donViTraLuongSelect : []}
+              placeholder="Chọn đơn vị trả lương"
+              optionsvalue={["id", "tenDonViTraLuong"]}
               style={{ width: "100%" }}
               // mode="multiple"
             />

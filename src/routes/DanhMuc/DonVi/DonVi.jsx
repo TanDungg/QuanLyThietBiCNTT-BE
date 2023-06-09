@@ -280,7 +280,7 @@ function DonVi({ permission, history }) {
     <div className="gx-main-content">
       <ContainerHeader
         title={"Đơn vị"}
-        description="Danh sách Đơn vị"
+        description="Danh sách đơn vị"
         buttons={addButtonRender()}
       />
       <Card className="th-card-margin-bottom ">

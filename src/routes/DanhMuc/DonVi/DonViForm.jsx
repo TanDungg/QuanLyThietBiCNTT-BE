@@ -1,4 +1,4 @@
-import { Card, Form, Input, Mentions } from "antd";
+import { Card, Form, Input } from "antd";
 import includes from "lodash/includes";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -84,12 +84,11 @@ const DonViForm = ({ history, match, permission }) => {
           setFieldsValue({
             donvi: data,
           });
-          setInfo(...res.data, res.data[0].donVi);
+          setInfo(...res.data, res.data[0].tapDoan);
         }
       })
       .catch((error) => console.error(error));
   };
-
   /**
    * Quay lại trang người dùng
    *
@@ -136,7 +135,7 @@ const DonViForm = ({ history, match, permission }) => {
         .catch((error) => console.error(error));
     }
     if (type === "edit") {
-      delete info.donVi;
+      delete info.tapDoan;
       var newData = { ...info, ...user };
       new Promise((resolve, reject) => {
         dispatch(
@@ -185,7 +184,7 @@ const DonViForm = ({ history, match, permission }) => {
             <Input className="input-item" placeholder="Nhập mã đơn vị" />
           </FormItem>
           <FormItem
-            label="Tên đơn vị"
+            label="Tên đon vị"
             name={["donvi", "tenDonVi"]}
             rules={[
               {

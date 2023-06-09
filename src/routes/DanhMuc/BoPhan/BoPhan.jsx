@@ -206,7 +206,7 @@ function BoPhan({ permission, history }) {
     {
       title: "Phòng ban",
       dataIndex: "tenPhongBan",
-      key: "TenPhongBan",
+      key: "tenPhongBan",
       align: "center",
     },
     {

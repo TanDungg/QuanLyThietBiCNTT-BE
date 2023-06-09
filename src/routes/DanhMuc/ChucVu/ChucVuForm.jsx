@@ -15,7 +15,7 @@ const initialState = {
   tenChucVu: "",
   boPhan_Id: "",
 };
-const ChucVuForm = ({ history, match, permission }) => {
+const DonViForm = ({ history, match, permission }) => {
   const dispatch = useDispatch();
   const [type, setType] = useState("new");
   const [id, setId] = useState(undefined);
@@ -82,14 +82,13 @@ const ChucVuForm = ({ history, match, permission }) => {
         if (res && res.data) {
           const data = res.data[0];
           setFieldsValue({
-            bophan: data,
+            chucvu: data,
           });
           setInfo(...res.data, res.data[0].boPhan);
         }
       })
       .catch((error) => console.error(error));
   };
-
   /**
    * Quay lại trang người dùng
    *
@@ -223,7 +222,7 @@ const ChucVuForm = ({ history, match, permission }) => {
             <Select
               className="heading-select slt-search th-select-heading"
               data={boPhanSelect ? boPhanSelect : []}
-              placeholder="Chọn bộ phận"
+              placeholder="Chọn tập đoàn"
               optionsvalue={["id", "tenBoPhan"]}
               style={{ width: "100%" }}
             />
@@ -239,4 +238,4 @@ const ChucVuForm = ({ history, match, permission }) => {
   );
 };
 
-export default ChucVuForm;
+export default DonViForm;

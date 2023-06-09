@@ -89,7 +89,6 @@ const BoPhanForm = ({ history, match, permission }) => {
       })
       .catch((error) => console.error(error));
   };
-
   /**
    * Quay lại trang người dùng
    *
@@ -223,7 +222,7 @@ const BoPhanForm = ({ history, match, permission }) => {
             <Select
               className="heading-select slt-search th-select-heading"
               data={phongBanSelect ? phongBanSelect : []}
-              placeholder="Chọn loại"
+              placeholder="Chọn phòng ban"
               optionsvalue={["id", "tenPhongBan"]}
               style={{ width: "100%" }}
             />
