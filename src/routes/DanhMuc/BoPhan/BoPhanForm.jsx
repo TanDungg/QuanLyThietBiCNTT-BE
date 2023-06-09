@@ -54,7 +54,7 @@ const BoPhanForm = ({ history, match, permission }) => {
   const getData = () => {
     new Promise((resolve, reject) => {
       dispatch(
-        fetchStart(`PhongBan`, "GET", null, "DETAIL", "", resolve, reject)
+        fetchStart(`Phongban`, "GET", null, "DETAIL", "", resolve, reject)
       );
     })
       .then((res) => {
@@ -135,7 +135,7 @@ const BoPhanForm = ({ history, match, permission }) => {
         .catch((error) => console.error(error));
     }
     if (type === "edit") {
-      delete info.phongBan;
+      delete info.phongban;
       var newData = { ...info, ...user };
       new Promise((resolve, reject) => {
         dispatch(

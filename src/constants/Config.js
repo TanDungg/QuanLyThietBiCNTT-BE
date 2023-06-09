@@ -1,5 +1,5 @@
-export const BASE_URL_API = "http://10.14.6.150:81";
-// export const BASE_URL_API = "https://localhost:5001";
+// export const BASE_URL_API = "http://10.14.6.150:81";
+export const BASE_URL_API = "https://localhost:5001";
 export const BASE_URL_APP = `http://localhost:4000`;
 // export const BASE_URL_APP = "http://qtsx-tab.thacoindustries.com";
 
