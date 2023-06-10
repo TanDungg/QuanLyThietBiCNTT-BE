@@ -1,7 +1,7 @@
 import { Card, Form, Input } from "antd";
 import includes from "lodash/includes";
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { fetchReset, fetchStart } from "src/appRedux/actions";
 import { FormSubmit, Select } from "src/components/Common";
@@ -11,18 +11,19 @@ import { DEFAULT_FORM_CUSTOM } from "src/constants/Config";
 const FormItem = Form.Item;
 
 const initialState = {
-  maChucVu: "",
-  tenChucVu: "",
-  boPhan_Id: "",
+  maHang: "",
+  tenHang: "",
+  loaiThietBi_Id: "",
 };
-const DonViForm = ({ history, match, permission }) => {
+const HangThietBiForm = ({ history, match, permission }) => {
   const dispatch = useDispatch();
   const [type, setType] = useState("new");
   const [id, setId] = useState(undefined);
+  const { data, loading } = useSelector(({ common }) => common).toJS();
   const [fieldTouch, setFieldTouch] = useState(false);
   const [form] = Form.useForm();
-  const { maChucVu, tenChucVu, boPhan_Id } = initialState;
-  const [boPhanSelect, setBoPhanSelect] = useState([]);
+  const { maHang, tenHang, loaiThietBi_Id } = initialState;
+  const [loaiThietBiSelect, setLoaiThietBiSelect] = useState([]);
 
   const { validateFields, resetFields, setFieldsValue } = form;
   const [info, setInfo] = useState({});
@@ -54,12 +55,12 @@ const DonViForm = ({ history, match, permission }) => {
   const getData = () => {
     new Promise((resolve, reject) => {
       dispatch(
-        fetchStart(`BoPhan`, "GET", null, "DETAIL", "", resolve, reject)
+        fetchStart(`LoaiThietBi`, "GET", null, "DETAIL", "", resolve, reject)
       );
     })
       .then((res) => {
         if (res && res.data) {
-          setBoPhanSelect(res.data);
+          setLoaiThietBiSelect(res.data);
         }
       })
       .catch((error) => console.error(error));
@@ -75,16 +76,24 @@ const DonViForm = ({ history, match, permission }) => {
     setId(id);
     new Promise((resolve, reject) => {
       dispatch(
-        fetchStart(`ChucVu/${id}`, "GET", null, "DETAIL", "", resolve, reject)
+        fetchStart(
+          `HangThietBi/${id}`,
+          "GET",
+          null,
+          "DETAIL",
+          "",
+          resolve,
+          reject
+        )
       );
     })
       .then((res) => {
         if (res && res.data) {
           const data = res.data[0];
           setFieldsValue({
-            chucvu: data,
+            hangthietbi: data,
           });
-          setInfo(...res.data, res.data[0].boPhan);
+          setInfo(...res.data, res.data[0].loaiThietBi);
         }
       })
       .catch((error) => console.error(error));
@@ -94,22 +103,21 @@ const DonViForm = ({ history, match, permission }) => {
    *
    */
   const goBack = () => {
-    history.push("/danh-muc/chuc-vu");
+    history.push("/danh-muc/hang-thiet-bi");
   };
-
   /**
    * Khi submit
    *
    * @param {*} values
    */
   const onFinish = (values) => {
-    saveData(values.chucvu);
+    saveData(values.hangthietbi);
   };
 
   const saveAndClose = () => {
     validateFields()
       .then((values) => {
-        saveData(values.chucvu, true);
+        saveData(values.hangthietbi, true);
       })
       .catch((error) => {
         console.log("error", error);
@@ -121,7 +129,7 @@ const DonViForm = ({ history, match, permission }) => {
       const newData = user;
       new Promise((resolve, reject) => {
         dispatch(
-          fetchStart(`ChucVu`, "POST", newData, "ADD", "", resolve, reject)
+          fetchStart(`LoaiThietBi`, "POST", newData, "ADD", "", resolve, reject)
         );
       })
         .then((res) => {
@@ -135,12 +143,12 @@ const DonViForm = ({ history, match, permission }) => {
         .catch((error) => console.error(error));
     }
     if (type === "edit") {
-      delete info.boPhan;
+      delete info.loaiThietBi;
       var newData = { ...info, ...user };
       new Promise((resolve, reject) => {
         dispatch(
           fetchStart(
-            `ChucVu/${id}`,
+            `HangThietBi/${id}`,
             "PUT",
             newData,
             "EDIT",
@@ -162,7 +170,8 @@ const DonViForm = ({ history, match, permission }) => {
     }
   };
 
-  const formTitle = type === "new" ? "Thêm mới chức vụ" : "Chỉnh sửa chức vụ";
+  const formTitle =
+    type === "new" ? "Thêm mới loại thiết bị" : "Chỉnh sửa loại thiết bị";
   return (
     <div className="gx-main-content">
       <ContainerHeader title={formTitle} back={goBack} />
@@ -175,8 +184,8 @@ const DonViForm = ({ history, match, permission }) => {
           onFieldsChange={() => setFieldTouch(true)}
         >
           <FormItem
-            label="Mã chức vụ"
-            name={["chucvu", "maChucVu"]}
+            label="Mã hãng thiết bị"
+            name={["hangthietbi", "maHang"]}
             rules={[
               {
                 type: "string",
@@ -184,16 +193,16 @@ const DonViForm = ({ history, match, permission }) => {
               },
               {
                 max: 50,
-                message: "Mã chức vụ không được quá 50 ký tự",
+                message: "Mã hãng thiết bị không được quá 50 ký tự",
               },
             ]}
-            initialValue={maChucVu}
+            initialValue={maHang}
           >
-            <Input className="input-item" placeholder="Nhập mã chức vụ" />
+            <Input className="input-item" placeholder="Nhập mã hãng thiết bị" />
           </FormItem>
           <FormItem
-            label="Tên chức vụ"
-            name={["chucvu", "tenChucVu"]}
+            label="Tên hãng thiết bị"
+            name={["hangthietbi", "tenHang"]}
             rules={[
               {
                 type: "string",
@@ -201,29 +210,32 @@ const DonViForm = ({ history, match, permission }) => {
               },
               {
                 max: 250,
-                message: "Tên chức vụ không được quá 250 ký tự",
+                message: "Tên hãng thiết bị không được quá 250 ký tự",
               },
             ]}
-            initialValue={tenChucVu}
+            initialValue={tenHang}
           >
-            <Input className="input-item" placeholder="Nhập tên chức vụ" />
+            <Input
+              className="input-item"
+              placeholder="Nhập tên hãng thiết bị"
+            />
           </FormItem>
           <FormItem
-            label="Bộ phận"
-            name={["chucvu", "boPhan_Id"]}
+            label="Loại thiết bị"
+            name={["hangthietbi", "loaiThietBi_Id"]}
             rules={[
               {
                 type: "string",
                 required: true,
               },
             ]}
-            initialValue={boPhan_Id}
+            initialValue={loaiThietBi_Id}
           >
             <Select
               className="heading-select slt-search th-select-heading"
-              data={boPhanSelect ? boPhanSelect : []}
-              placeholder="Chọn tập đoàn"
-              optionsvalue={["id", "tenBoPhan"]}
+              data={loaiThietBiSelect ? loaiThietBiSelect : []}
+              placeholder="Chọn loại thiết bị"
+              optionsvalue={["id", "tenLoaiThietBi"]}
               style={{ width: "100%" }}
             />
           </FormItem>
@@ -238,4 +250,4 @@ const DonViForm = ({ history, match, permission }) => {
   );
 };
 
-export default DonViForm;
+export default HangThietBiForm;

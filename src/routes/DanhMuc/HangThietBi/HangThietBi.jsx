@@ -23,7 +23,7 @@ import { convertObjectToUrlParams } from "src/util/Common";
 
 const { EditableRow, EditableCell } = EditableTableRow;
 
-function ChucVu({ permission, history }) {
+function HangThietBi({ permission, history }) {
   const dispatch = useDispatch();
   const { data, loading } = useSelector(({ common }) => common).toJS();
   const [keyword, setKeyword] = useState("");
@@ -32,7 +32,7 @@ function ChucVu({ permission, history }) {
 
   useEffect(() => {
     function load() {
-      dispatch(fetchStart("ChucVu", "GET", null, "LIST"));
+      dispatch(fetchStart("HangThietBi", "GET", null, "LIST"));
     }
     if (permission && permission.view) {
       load();
@@ -45,7 +45,7 @@ function ChucVu({ permission, history }) {
   }, []);
 
   const loadData = () => {
-    dispatch(fetchStart("ChucVu", "GET", null, "LIST"));
+    dispatch(fetchStart("HangThietBi", "GET", null, "LIST"));
   };
 
   /**
@@ -60,7 +60,7 @@ function ChucVu({ permission, history }) {
    */
   const getListData = (keyword, page, pageSize) => {
     let param = convertObjectToUrlParams({ pageSize, page, keyword });
-    dispatch(fetchStart(`ChucVu?${param}`, "GET", null, "LIST"));
+    dispatch(fetchStart(`HangThietBi?${param}`, "GET", null, "LIST"));
   };
   /**
    * Tìm kiếm người dùng
@@ -97,8 +97,8 @@ function ChucVu({ permission, history }) {
    * @param {*} item
    */
   const deleteItemAction = (item) => {
-    let url = `ChucVu/${item.id}`;
-    if (item.isRemove) url = `ChucVu/Remove/${item.id}`;
+    let url = `HangThietBi/${item.id}`;
+    if (item.isRemove) url = `HangThietBi/Remove/${item.id}`;
     new Promise((resolve, reject) => {
       dispatch(fetchStart(url, "DELETE", null, "DELETE", "", resolve, reject));
     })
@@ -119,7 +119,7 @@ function ChucVu({ permission, history }) {
       permission && permission.edit ? (
         <Link
           to={{
-            pathname: `/danh-muc/chuc-vu/${item.id}/chinh-sua`,
+            pathname: `/danh-muc/hang-thiet-bi/${item.id}/chinh-sua`,
             state: { itemData: item, permission },
           }}
           title="Sửa"
@@ -161,7 +161,7 @@ function ChucVu({ permission, history }) {
       new Promise((resolve, reject) => {
         dispatch(
           fetchStart(
-            `ChucVu/${item.id}`,
+            `HangThietBi/${item.id}`,
             "PUT",
             {
               ...item,
@@ -192,22 +192,34 @@ function ChucVu({ permission, history }) {
       align: "center",
     },
     {
-      title: "Mã chức vụ",
-      dataIndex: "maChucVu",
-      key: "maChucVu",
+      title: "Mã hãng thiết bị",
+      dataIndex: "maHang",
+      key: "maHang",
       align: "center",
     },
     {
-      title: "Tên chức vụ",
-      dataIndex: "tenChucVu",
-      key: "tenChucVu",
+      title: "Tên hãng thiết bị",
+      dataIndex: "tenHang",
+      key: "tenHang",
       align: "center",
     },
     {
-      title: "Bộ phận",
-      dataIndex: "tenBoPhan",
-      key: "tenBoPhan",
+      title: "Tên loại thiết bị",
+      dataIndex: "lstLoai",
+      key: "lstLoai",
       align: "center",
+      render: (lstLoai) => {
+        return lstLoai.map((loai) => loai.tenLoaiThietBi).join(", ");
+      },
+    },
+    {
+      title: "Tên hệ thống",
+      dataIndex: "lstLoai",
+      key: "lstLoai",
+      align: "center",
+      render: (lstLoai) => {
+        return lstLoai.map((loai) => loai.heThong_Id).join(", ");
+      },
     },
     {
       title: "Chức năng",
@@ -225,6 +237,7 @@ function ChucVu({ permission, history }) {
       responsive: ["sm"],
     },
   ];
+
   const components = {
     body: {
       row: EditableRow,
@@ -256,7 +269,7 @@ function ChucVu({ permission, history }) {
    */
   const handleRedirect = () => {
     history.push({
-      pathname: "/danh-muc/chuc-vu/them-moi",
+      pathname: "/danh-muc/hang-thiet-bi/them-moi",
     });
   };
 
@@ -279,8 +292,8 @@ function ChucVu({ permission, history }) {
   return (
     <div className="gx-main-content">
       <ContainerHeader
-        title={"Chức vụ"}
-        description="Danh sách chức vụ"
+        title={"Hãng thiết bị"}
+        description="Danh sách hãng thiết bị"
         buttons={addButtonRender()}
       />
       <Card className="th-card-margin-bottom ">
@@ -314,4 +327,4 @@ function ChucVu({ permission, history }) {
   );
 }
 
-export default ChucVu;
+export default HangThietBi;

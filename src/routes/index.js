@@ -9,6 +9,7 @@ const Home = asyncComponent(() => import("./Home"));
 const HeThong = asyncComponent(() => import("./HeThong"));
 const TaiKhoan = asyncComponent(() => import("./TaiKhoan"));
 const DanhMuc = asyncComponent(() => import("./DanhMuc"));
+const QuanLyThietBi = asyncComponent(() => import("./QuanLyThietBi"));
 
 const App = ({ match, menus, location }) => {
   const { pathname } = location;
@@ -44,6 +45,11 @@ const App = ({ match, menus, location }) => {
             path={`${match.url}danh-muc`}
             component={Auth(DanhMuc, menus, pathname)}
           />
+          <Route
+            path={`${match.url}quan-ly-thiet-bi`}
+            component={Auth(QuanLyThietBi, menus, pathname)}
+          />
+
           <Route path="*" component={Auth(Home, menus, pathname)} />
         </Switch>
       )}

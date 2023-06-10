@@ -62,6 +62,10 @@ function LoaiThietBi({ history, permission }) {
     let param = convertObjectToUrlParams({ pageSize, page, keyword });
     dispatch(fetchStart(`LoaiThietBi?${param}`, "GET", null, "LIST"));
   };
+  function getTenLoaiThietBi(loaiThietBi_Id) {
+    const loaiThietBi = data.find((item) => item.id === loaiThietBi_Id);
+    return loaiThietBi ? loaiThietBi.tenLoaiThietBi : "";
+  }
   /**
    * Tìm kiếm người dùng
    *
@@ -119,7 +123,7 @@ function LoaiThietBi({ history, permission }) {
       permission && permission.edit ? (
         <Link
           to={{
-            pathname: `/thiet-bi/loai-thiet-bi/${item.id}/chinh-sua`,
+            pathname: `/quan-ly-thiet-bi/loai-thiet-bi/${item.id}/chinh-sua`,
             state: { itemData: item, permission },
           }}
           title="Sửa"
@@ -169,6 +173,20 @@ function LoaiThietBi({ history, permission }) {
       align: "center",
     },
     {
+      title: "Loại thiết bị cha",
+      dataIndex: "loaiThietBi_Id",
+      key: "loaiThietBi_Id",
+      align: "center",
+      render: (loaiThietBi_Id) => getTenLoaiThietBi(loaiThietBi_Id),
+    },
+    {
+      title: "Tên hệ thống",
+      dataIndex: "tenHeThong",
+      key: "tenHeThong",
+      align: "center",
+      // render: (heThong_Id) => getTenHeThong(heThong_Id),
+    },
+    {
       title: "Chức năng",
       key: "action",
       align: "center",
@@ -214,7 +232,7 @@ function LoaiThietBi({ history, permission }) {
    */
   const handleRedirect = () => {
     history.push({
-      pathname: "/thiet-bi/loai-thiet-bi/them-moi",
+      pathname: "/quan-ly-thiet-bi/loai-thiet-bi/them-moi",
     });
   };
 
@@ -237,8 +255,8 @@ function LoaiThietBi({ history, permission }) {
   return (
     <div className="gx-main-content">
       <ContainerHeader
-        title={"Tập đoàn"}
-        description="Danh sách tập đoàn"
+        title={"Loại thiết bị"}
+        description="Danh sách loại thiết bị"
         buttons={addButtonRender()}
       />
       <Card className="th-card-margin-bottom ">

@@ -23,7 +23,7 @@ import { convertObjectToUrlParams } from "src/util/Common";
 
 const { EditableRow, EditableCell } = EditableTableRow;
 
-function HangThietBi({ history, permission }) {
+function NhomThietBi({ history, permission }) {
   const dispatch = useDispatch();
   const { data, loading } = useSelector(({ common }) => common).toJS();
   const [keyword, setKeyword] = useState("");
@@ -32,7 +32,7 @@ function HangThietBi({ history, permission }) {
 
   useEffect(() => {
     function load() {
-      dispatch(fetchStart("HangThietBi", "GET", null, "LIST"));
+      dispatch(fetchStart("HeThong", "GET", null, "LIST"));
     }
     if (permission && permission.view) {
       load();
@@ -45,7 +45,7 @@ function HangThietBi({ history, permission }) {
   }, []);
 
   const loadData = () => {
-    dispatch(fetchStart("HangThietBi", "GET", null, "LIST"));
+    dispatch(fetchStart("HeThong", "GET", null, "LIST"));
   };
 
   /**
@@ -60,7 +60,7 @@ function HangThietBi({ history, permission }) {
    */
   const getListData = (keyword, page, pageSize) => {
     let param = convertObjectToUrlParams({ pageSize, page, keyword });
-    dispatch(fetchStart(`HangThietBi?${param}`, "GET", null, "LIST"));
+    dispatch(fetchStart(`HeThong?${param}`, "GET", null, "LIST"));
   };
   /**
    * Tìm kiếm người dùng
@@ -97,8 +97,8 @@ function HangThietBi({ history, permission }) {
    * @param {*} item
    */
   const deleteItemAction = (item) => {
-    let url = `HangThietBi/${item.id}`;
-    if (item.isRemove) url = `HangThietBi/Remove/${item.id}`;
+    let url = `HeThong/${item.id}`;
+    if (item.isRemove) url = `HeThong/Remove/${item.id}`;
     new Promise((resolve, reject) => {
       dispatch(fetchStart(url, "DELETE", null, "DELETE", "", resolve, reject));
     })
@@ -119,7 +119,7 @@ function HangThietBi({ history, permission }) {
       permission && permission.edit ? (
         <Link
           to={{
-            pathname: `/thiet-bi/hang-thiet-bi/${item.id}/chinh-sua`,
+            pathname: `/quan-ly-thiet-bi/he-thong/${item.id}/chinh-sua`,
             state: { itemData: item, permission },
           }}
           title="Sửa"
@@ -157,15 +157,15 @@ function HangThietBi({ history, permission }) {
       align: "center",
     },
     {
-      title: "Mã hãng thiết bị",
-      dataIndex: "maHangThietBi",
-      key: "maHangThietBi",
+      title: "Mã nhóm thiết bị",
+      dataIndex: "maHeThong",
+      key: "maHeThong",
       align: "center",
     },
     {
-      title: "Tên hãng thiết bị",
-      dataIndex: "tenHangThietBi",
-      key: "tenHangThietBi",
+      title: "Tên nhóm thiết bị",
+      dataIndex: "tenHeThong",
+      key: "tenHeThong",
       align: "center",
     },
     {
@@ -214,7 +214,7 @@ function HangThietBi({ history, permission }) {
    */
   const handleRedirect = () => {
     history.push({
-      pathname: "/thiet-bi/hang-thiet-bi/them-moi",
+      pathname: "/quan-ly-thiet-bi/he-thong/them-moi",
     });
   };
 
@@ -237,8 +237,8 @@ function HangThietBi({ history, permission }) {
   return (
     <div className="gx-main-content">
       <ContainerHeader
-        title={"Hãng thiết bị"}
-        description="Danh sách hãng thiết bị"
+        title={"Nhóm thiết bị"}
+        description="Danh sách nhóm thiết bị"
         buttons={addButtonRender()}
       />
       <Card className="th-card-margin-bottom ">
@@ -272,4 +272,4 @@ function HangThietBi({ history, permission }) {
   );
 }
 
-export default HangThietBi;
+export default NhomThietBi;
